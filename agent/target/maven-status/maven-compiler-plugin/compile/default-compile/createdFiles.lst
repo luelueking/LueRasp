@@ -1,5 +1,10 @@
 com/lue/rasp/hook/ProcessBuilderHook.class
+com/lue/rasp/visitor/MySqlVisitor.class
+com/lue/rasp/visitor/MySqlVisitor$2.class
+com/lue/rasp/transform/AgentTransform.class
+com/lue/rasp/visitor/adapter/MySqlVisitorAdapter.class
+com/lue/rasp/hook/MySqlHook.class
 com/lue/rasp/Agent.class
+com/lue/rasp/visitor/MySqlVisitor$1.class
 com/lue/rasp/visitor/adapter/ProcessBuilderVisitorAdapter.class
 com/lue/rasp/visitor/ProcessBuilderVisitor.class
-com/lue/rasp/transform/AgentTransform.class

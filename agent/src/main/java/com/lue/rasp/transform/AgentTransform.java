@@ -1,5 +1,6 @@
 package com.lue.rasp.transform;
 
+import com.lue.rasp.visitor.MySqlVisitor;
 import com.lue.rasp.visitor.ProcessBuilderVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -23,6 +24,7 @@ public class AgentTransform implements ClassFileTransformer {
      * @return
      * @throws IllegalClassFormatException
      */
+    // TODO 优化transform逻辑
     @Override
     public byte[] transform(ClassLoader loader, String className,
                             Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
@@ -37,6 +39,18 @@ public class AgentTransform implements ClassFileTransformer {
                 ClassReader classReader  = new ClassReader(classfileBuffer);
                 ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
                 ClassVisitor classVisitor = new ProcessBuilderVisitor(classWriter);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
+
+            if (className.contains("StatementImpl")) {
+                logger.warning("Attention Load Class: " + className);
+
+                ClassReader classReader  = new ClassReader(classfileBuffer);
+                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor = new MySqlVisitor(classWriter);
 
                 classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
 
