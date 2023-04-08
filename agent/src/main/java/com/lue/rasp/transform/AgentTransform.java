@@ -1,5 +1,6 @@
 package com.lue.rasp.transform;
 
+import com.lue.rasp.visitor.HttpVisitor;
 import com.lue.rasp.visitor.MySqlVisitor;
 import com.lue.rasp.visitor.ProcessBuilderVisitor;
 import org.objectweb.asm.ClassReader;
@@ -32,6 +33,18 @@ public class AgentTransform implements ClassFileTransformer {
 
         className = className.replace("/", ".");
         try {
+            if (className.contains("ServletInitialHandler")) { // http hook
+                logger.warning("Attention Load Class: " + className);
+
+                ClassReader classReader = new ClassReader(classfileBuffer);
+                ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor  = new HttpVisitor(classWriter);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
+
             if (className.contains("ProcessBuilder")) { // 判断类名是否包含ProcessBuilder
 
                 logger.warning("Attention Load Class: " + className);

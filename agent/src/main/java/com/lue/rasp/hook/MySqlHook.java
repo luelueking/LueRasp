@@ -2,12 +2,15 @@ package com.lue.rasp.hook;
 
 import com.alibaba.druid.wall.WallCheckResult;
 import com.alibaba.druid.wall.spi.MySqlWallProvider;
+import com.lue.rasp.context.Context;
 
 import java.util.logging.Logger;
 
 // TODO test sqli
-public class MySqlHook {
+public class MySqlHook implements HookInterface{
     private static final Logger logger = Logger.getLogger(MySqlHook.class.getName());
+    private ThreadLocal<Context> context;
+
 
     public static boolean filter(String sql) {
         MySqlWallProvider mySqlWallProvider = new MySqlWallProvider();
