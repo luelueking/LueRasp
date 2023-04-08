@@ -32,9 +32,9 @@
 
         <!--http-->
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina</artifactId>
-            <version>9.0.56</version>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.64</version>
         </dependency>
         <dependency>
             <groupId>io.undertow</groupId>
@@ -90,6 +90,8 @@
                                 <includes>
                                     <include>commons-io:commons-io:jar:*</include>
                                     <include>org.ow2.asm:asm-all:jar:*</include>
+<!--                                    <include>org.apache.tomcat.embed:tomcat-embed-core:jar:*</include>-->
+                                    <include>com.alibaba:druid:jar:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

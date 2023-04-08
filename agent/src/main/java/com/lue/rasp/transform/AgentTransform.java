@@ -3,6 +3,7 @@ package com.lue.rasp.transform;
 import com.lue.rasp.visitor.HttpVisitor;
 import com.lue.rasp.visitor.MySqlVisitor;
 import com.lue.rasp.visitor.ProcessBuilderVisitor;
+import com.lue.rasp.visitor.TomcatHttpVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -33,6 +34,16 @@ public class AgentTransform implements ClassFileTransformer {
 
         className = className.replace("/", ".");
         try {
+            if (className.contains("StandardWrapperValve")) { // tomcat http hook
+                logger.warning("Attention Load Class: " + className);
+                ClassReader classReader = new ClassReader(classfileBuffer);
+                ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor  = new TomcatHttpVisitor(classWriter);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
             if (className.contains("ServletInitialHandler")) { // http hook
                 logger.warning("Attention Load Class: " + className);
 
