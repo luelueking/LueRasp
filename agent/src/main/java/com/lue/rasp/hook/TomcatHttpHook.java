@@ -2,11 +2,7 @@ package com.lue.rasp.hook;
 
 import com.lue.rasp.context.Context;
 import com.lue.rasp.context.ContextManager;
-import com.lue.rasp.tool.StringUtils;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 用于hook tomcat的http请求
@@ -24,6 +20,7 @@ public class TomcatHttpHook implements HookInterface{
         System.out.println(obj1);
         System.out.println(obj2);
         if (ContextManager.isNull()) {
+            System.out.println("context 为null，新建一个");
             Context context = new Context();
             ContextManager.addContext(context);
         }
@@ -32,4 +29,14 @@ public class TomcatHttpHook implements HookInterface{
         context.setResponse(obj2);
     }
 
+    /**
+     * 清除上下文
+     * 这里"取巧" 在下次请求之前清除线程变量
+     * org.apache.catalina.connector.CoyoteAdapter#service(org.apache.coyote.Request, org.apache.coyote.Response)
+     */
+    public void cleanRequestInfo(Object obj1,Object obj2) {
+        System.out.println("正在清除context...");
+        ContextManager.requestContext.remove();
+        System.out.println("清除完成"+ContextManager.isNull());
+    }
 }

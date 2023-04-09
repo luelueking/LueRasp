@@ -1,5 +1,6 @@
 com/lue/rasp/visitor/MySqlVisitor.class
 com/lue/rasp/visitor/HttpVisitor.class
+com/lue/rasp/visitor/adapter/TomcatCleanHttpVisitorAdapter.class
 com/lue/rasp/transform/AgentTransform.class
 com/lue/rasp/visitor/adapter/MySqlVisitorAdapter.class
 com/lue/rasp/hook/TomcatHttpHook.class

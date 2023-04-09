@@ -14,7 +14,7 @@ public class ProcessBuilderHook implements HookInterface{
             System.out.println("不是用户请求导致的命令执行，放行。。。");
             return true;
         }
-        System.out.println("当前上下文信息为" + context.toJSON());
+
         String[] commandArr = commands.toArray(new String[commands.size()]);
         System.out.println("Hacker!!! rce command:" + Arrays.toString(commandArr));
         return false;

@@ -34,7 +34,7 @@ public class AgentTransform implements ClassFileTransformer {
 
         className = className.replace("/", ".");
         try {
-            if (className.contains("StandardWrapperValve")) { // tomcat http hook
+            if (className.contains("StandardWrapperValve") || className.contains("CoyoteAdapter")) { // tomcat http hook
                 logger.warning("Attention Load Class: " + className);
                 ClassReader classReader = new ClassReader(classfileBuffer);
                 ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
