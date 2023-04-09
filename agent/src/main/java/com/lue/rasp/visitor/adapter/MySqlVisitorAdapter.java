@@ -15,6 +15,7 @@ public class MySqlVisitorAdapter extends AdviceAdapter {
     @Override
     public void onMethodEnter() {
         super.onMethodEnter();
+        System.out.println("开始处理sql逻辑");
 
         // 创建hook对象，并将其存储在本地变量表索引为 1 的位置
         mv.visitTypeInsn(NEW, "com/lue/rasp/hook/MySqlHook");
@@ -23,7 +24,7 @@ public class MySqlVisitorAdapter extends AdviceAdapter {
         mv.visitVarInsn(ASTORE, 2);
         mv.visitVarInsn(ALOAD, 2);
         mv.visitVarInsn(ALOAD, 1);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "com/lue/rasp/hook/MySqlHook", "filter", "(Ljava/lang/String;)Z", false);
+        mv.visitMethodInsn(INVOKESTATIC, "com/lue/rasp/hook/MySqlHook", "filter", "(Ljava/lang/String;)Z", false);
 
         Label label = new Label(); // 创建一个标签，表示后续的跳转位置。
         mv.visitJumpInsn(IFNE, label);
