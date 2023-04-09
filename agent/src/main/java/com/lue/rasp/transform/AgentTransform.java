@@ -97,6 +97,19 @@ public class AgentTransform implements ClassFileTransformer {
                 classfileBuffer = classWriter.toByteArray();
             }
 
+            // deserialization
+            if (className.contains("ObjectInputStream")) {
+                logger.warning("Attention Load Class: " + className);
+
+                ClassReader classReader  = new ClassReader(classfileBuffer);
+                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor = new DeserializationVisitor(classWriter);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
