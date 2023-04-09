@@ -1,22 +1,24 @@
 package com.lue.rasp.transform;
 
-import com.lue.rasp.visitor.HttpVisitor;
-import com.lue.rasp.visitor.MySqlVisitor;
-import com.lue.rasp.visitor.ProcessBuilderVisitor;
-import com.lue.rasp.visitor.TomcatHttpVisitor;
+import com.lue.rasp.visitor.*;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 import java.util.logging.Logger;
 
 public class AgentTransform implements ClassFileTransformer {
 
+    private final Instrumentation inst;
     private static final Logger logger = Logger.getLogger(AgentTransform.class.getName());
 
+    public AgentTransform(Instrumentation inst) {
+        this.inst = inst;
+    }
     /**
      * @param loader
      * @param className
@@ -56,19 +58,6 @@ public class AgentTransform implements ClassFileTransformer {
                 classfileBuffer = classWriter.toByteArray();
             }
 
-            if (className.contains("ProcessBuilder")) { // 判断类名是否包含ProcessBuilder
-
-                logger.warning("Attention Load Class: " + className);
-
-                ClassReader classReader  = new ClassReader(classfileBuffer);
-                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
-                ClassVisitor classVisitor = new ProcessBuilderVisitor(classWriter);
-
-                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
-
-                classfileBuffer = classWriter.toByteArray();
-            }
-
             if (className.contains("StatementImpl")) {
                 logger.warning("Attention Load Class: " + className);
 
@@ -80,6 +69,34 @@ public class AgentTransform implements ClassFileTransformer {
 
                 classfileBuffer = classWriter.toByteArray();
             }
+
+            // rce
+//            if (className.contains("ProcessBuilder")) { // 判断类名是否包含ProcessBuilder
+//
+//                logger.warning("Attention Load Class: " + className);
+//
+//                ClassReader classReader  = new ClassReader(classfileBuffer);
+//                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+//                ClassVisitor classVisitor = new ProcessBuilderVisitor(classWriter);
+//
+//                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+//
+//                classfileBuffer = classWriter.toByteArray();
+//            }
+
+            // native process rce
+            if (className.contains("UNIXProcess") || className.contains("ProcessImpl")) {
+                logger.warning("Attention Load Class: " + className);
+
+                ClassReader classReader  = new ClassReader(classfileBuffer);
+                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor = new NativeProcessVisitor(classWriter,inst,this);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

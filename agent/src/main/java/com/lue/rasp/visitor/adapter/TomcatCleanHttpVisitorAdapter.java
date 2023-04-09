@@ -36,4 +36,8 @@ public class TomcatCleanHttpVisitorAdapter extends AdviceAdapter {
         System.out.println("结束TomcatHttpHook逻辑处理");
     }
 
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        super.visitMaxs(maxStack, maxLocals);
+    }
 }
