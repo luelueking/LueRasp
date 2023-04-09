@@ -5,8 +5,8 @@
 -Dfile.encoding=UTF-8 -noverify -Xbootclasspath/p:agent.jar -javaagent:agent.jar
 ```
 ### Ability
-- RCE Defense
-- SQLi Defense (todo test)
+- RCE Defense （hook native!）
+- SQLi Defense 
 
 ### Java-Sec-Code靶机测试
 
