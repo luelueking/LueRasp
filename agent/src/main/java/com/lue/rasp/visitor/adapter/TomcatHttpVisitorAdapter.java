@@ -1,5 +1,6 @@
 package com.lue.rasp.visitor.adapter;
 
+import org.apache.catalina.Context;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -15,7 +16,6 @@ public class TomcatHttpVisitorAdapter extends AdviceAdapter {
     public void onMethodEnter() {
         System.out.println("开始处TomcatHttpHook逻辑");
         super.onMethodEnter();
-
         // 创建TomcatHttpHook对象
         mv.visitTypeInsn(NEW, "com/lue/rasp/hook/TomcatHttpHook");
         mv.visitInsn(DUP);

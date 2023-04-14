@@ -110,6 +110,19 @@ public class AgentTransform implements ClassFileTransformer {
                 classfileBuffer = classWriter.toByteArray();
             }
 
+            // DocumentBuilderFactory xxe
+            if (className.contains("SAXReader")) {
+                logger.warning("Attention Load Class: " + className);
+
+                ClassReader classReader  = new ClassReader(classfileBuffer);
+                ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                ClassVisitor classVisitor = new XXEVisitor(classWriter);
+
+                classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+
+                classfileBuffer = classWriter.toByteArray();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -19,6 +19,10 @@ public class TomcatHttpHook implements HookInterface{
         System.out.println("开始存储request信息。。。");
         System.out.println(obj1);
         System.out.println(obj2);
+//        Request request = (org.apache.catalina.connector.Request)obj1;
+//        Response response = (org.apache.catalina.connector.Response)obj2;
+//        String contentType = request.getContentType();
+//        System.out.println("contentType"+contentType);
         if (ContextManager.isNull()) {
             System.out.println("context 为null，新建一个");
             Context context = new Context();

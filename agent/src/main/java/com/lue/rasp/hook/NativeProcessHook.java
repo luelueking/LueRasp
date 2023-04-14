@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class NativeProcessHook implements HookInterface{
 
-    public boolean filter(Object obj1,Object obj2) {
+    public static boolean filter(Object obj1,Object obj2) {
         Context context = ContextManager.getContext();
         if (context == null) {
             System.out.println("不是用户请求导致的命令执行，放行。。。");

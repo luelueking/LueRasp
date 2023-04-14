@@ -41,6 +41,7 @@
                   <include>commons-io:commons-io:jar:*</include>
                   <include>org.ow2.asm:asm-all:jar:*</include>
                   <include>com.alibaba:druid:jar:*</include>
+                  <include>org.dom4j:dom4j:jar:*</include>
                 </includes>
               </artifactSet>
             </configuration>
